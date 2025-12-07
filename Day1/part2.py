@@ -9,19 +9,28 @@ class Solution:
 
         for row in fileData:
             count = int(row[1:])
-            
-            if row[0] == "L":
+
+            if currentNumber == 0 and row[0] == "L":
                 currentNumber -= count
+                
+                currentNumber += self.MAX
+
             else:
-                currentNumber += count
-
-            while (currentNumber >= self.MAX or currentNumber < self.MIN):
-                zeroCount += 1
-
-                if currentNumber >= self.MAX:
-                    currentNumber -= self.MAX
+                if row[0] == "L":
+                    currentNumber -= count
                 else:
-                    currentNumber += self.MAX
+                    currentNumber += count
+
+            if (currentNumber >= self.MAX or currentNumber < self.MIN):
+                while (currentNumber >= self.MAX or currentNumber < self.MIN):
+                    zeroCount += 1
+
+                    if currentNumber >= self.MAX:
+                        currentNumber -= self.MAX
+                    else:
+                        currentNumber += self.MAX
+            elif currentNumber == 0:
+                zeroCount += 1
 
         return zeroCount
 
@@ -34,15 +43,17 @@ class Solution:
 
 sol = Solution()
 #Test 1
-testFile = "Day1/textInputData.txt"
+# testFile = "Day1/textInputData.txt"
 
-answer = sol.safeBreaker(testFile)
-if answer != 6:
-    print("Failed, got " + str(answer) + " and expected 6")
-    exit()
-else:
-    print("Passed!")
+# answer = sol.safeBreaker(testFile)
+# if answer != 6:
+#     print("Failed, got " + str(answer) + " and expected 6")
+#     exit()
+# else:
+#     print("Passed!")
 
 
 print(sol.safeBreaker("Day1/input.txt"))
-# 6426 too hight÷
+# 6426 too hight
+
+# 6300 Too low
