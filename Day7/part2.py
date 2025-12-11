@@ -15,20 +15,22 @@ class Solution:
 
         return self.fireLazer(data, 1, s)
 
-
     def fireLazer(self, data, col, row):
-        if len(data) <= col or data[col][row] == "|":
-            return 0
+        if len(data) <= col:
+            return 1
         
         elif data[col][row] == "^":
-            total = 1
+            total = 0
             total += self.fireLazer(data, col+1, row-1)
             total += self.fireLazer(data, col+1, row+1)
             return total
         
+        elif data[col][row] == ".":
+            ans =  self.fireLazer(data, col+1, row)
+            data[col][row] = ans
+            return ans
         else:
-            data[col][row] = "|"
-            return self.fireLazer(data, col+1, row)
+            return data[col][row]
 
 
     def parseFile(self, filename):
@@ -42,7 +44,7 @@ sol = Solution()
 testFile = "Day7/rawData1.txt"
 
 answer = sol.MajorLazer(testFile)
-expected = 21
+expected = 40
 if answer != expected:
     print("Failed, got " + str(answer) + " and expected " + str(expected))
     exit()
