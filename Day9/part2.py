@@ -1,37 +1,71 @@
+from cmath import inf
+import math
+
 class Solution:
-    def MajorLazer(self, filename):
+    def largestBox(self, filename):
         data = self.parseFile(filename)
+        largestBoxArea = 0
 
         for i in range(len(data)):
             if data[i][-1] == '\n':
                 data[i] = data[i][:len(data[i])-1]
-            data[i] = list(data[i])
+            data[i] = data[i].split(",")
 
-        s = 0
-        for i in range(len(data[0])):
-            if data[0][i] == "S":
-                s = i
-                break
+        connections = set()
+        for i in range(len(data)):
+            firstX, firstY = data[i]
 
-        return self.fireLazer(data, 1, s)
+            if i == len(data)-1:
+                secondX, secondY = data[0]
+            else:
+                secondX, secondY = data[i+1]
 
-    def fireLazer(self, data, col, row):
-        if len(data) <= col:
-            return 1
+            if firstX == secondX:
+                if firstY > secondY:
+                    for j in range(firstY+1, secondY):
+                        connections.add([firstX, j])
+
+                else:
+                    for j in range(secondY+1, firstY):
+                        connections.add([firstX, j])
+
+            else:
+                if firstX > secondX:
+                    for j in range(firstX+1, secondX):
+                        connections.add([j, firstY])
+
+                else:
+                    for j in range(secondX+1, firstX):
+                        connections.add([j, firstY])
+
         
-        elif data[col][row] == "^":
-            total = 0
-            total += self.fireLazer(data, col+1, row-1)
-            total += self.fireLazer(data, col+1, row+1)
-            return total
-        
-        elif data[col][row] == ".":
-            ans =  self.fireLazer(data, col+1, row)
-            data[col][row] = ans
-            return ans
-        else:
-            return data[col][row]
 
+        for i in range(len(data)):
+            for j in range(i+1, len(data)):
+                firstX, firstY = data[i]
+                secondX, secondY = data[j]
+                area = (1+abs(int(secondX)-int(firstX))) * (1+abs(int(secondY)-int(firstY)))
+                
+                if firstX == secondX:
+                    if firstY > secondY:
+                        for j in range(firstY+1, secondY):
+                            if [firstX, j] in connections
+                            connections.append()
+
+                    else:
+                        for j in range(secondY+1, firstY):
+                            connections.append([firstX, j])
+
+                else:
+                    if firstX > secondX:
+                        for j in range(firstX+1, secondX):
+                            connections.append([j, firstY])
+
+                    else:
+                        for j in range(secondX+1, firstX):
+                            connections.append([j, firstY])
+
+        return largestBoxArea
 
     def parseFile(self, filename):
         file = open(filename, "r")
@@ -41,15 +75,14 @@ class Solution:
 
 sol = Solution()
 #Test 1
-testFile = "Day7/rawData1.txt"
+testFile = "Day9/rawData1.txt"
 
-answer = sol.MajorLazer(testFile)
-expected = 40
+answer = sol.largestBox(testFile)
+expected = 24
 if answer != expected:
     print("Failed, got " + str(answer) + " and expected " + str(expected))
     exit()
 else:
     print("Passed!")
 
-
-print(sol.MajorLazer("Day7/rawData2.txt"))
+print(sol.largestBox("Day9/rawData2.txt"))
